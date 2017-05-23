@@ -1,8 +1,7 @@
 Inner- and Outer Recursive Neural Networks for Chemoinformatics
 =================================================================
 
-This is a software package containing two types of recursive neural networks for molecular property predictions based on SMILES. 
-While both models ca solve the same problems, their inner workings are vastly different. 
+This software repository contains two types of recursive neural networks implemented in Tensorflow and Keras for molecular property predictions based on SMILES: inner- and outer recursive neural networks.  Both types of models can be trained to predict properties like e.g., aqueous solubility, melting points or toxicity of molecules. While both models can solve the same problems, their inner workings are vastly different. 
 
 
 #### General Information
