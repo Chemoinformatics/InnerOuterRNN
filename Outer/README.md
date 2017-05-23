@@ -1,7 +1,7 @@
 The Outer Approach in Chemoinformatics (Keras-based implementation of Neural Fingerprints)
 =================================================
 
-This is a Keras (Tensorflow & Theano) implementation based on the model proposed in [Convolutional Networks on Graphs for Learning Molecular Fingerprints (Duvenaud et al.)](http://arxiv.org/pdf/1509.09292.pdf)
+This is a Keras (Tensorflow & Theano) implementation based on the model proposed in [Convolutional Networks on Graphs for Learning Molecular Fingerprints (David Duvenaud et al., Advances in neural information processing systems, 2015)](http://arxiv.org/pdf/1509.09292.pdf)
 
 It implements convolutional neural networks operating on molecular graphs (SMILES) of arbitrary size for chemical property prediction (e.g. solubility).
 
