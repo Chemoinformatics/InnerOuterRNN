@@ -3,7 +3,7 @@ import keras.regularizers as regularizers
 import keras.models as models
 import keras.layers as layers
 import keras.backend as backend
-import config
+from . import config
 
 
 

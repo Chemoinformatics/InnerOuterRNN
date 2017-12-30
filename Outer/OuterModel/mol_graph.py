@@ -2,24 +2,23 @@
 some pre-processing functions from github.com/HIPS/neural-fingerprint
 '''
 import numpy as np
+from rdkit import Chem
 from rdkit.Chem import MolFromSmiles
 
 
-import numpy as np
-from rdkit import Chem
 
 
 
 def one_of_k_encoding(x, allowable_set):
     if x not in allowable_set:
         raise Exception("input {0} not in allowable set{1}:".format(x, allowable_set))
-    return map(lambda s: x == s, allowable_set)
+    return list(map(lambda s: x == s, allowable_set))
 
 def one_of_k_encoding_unk(x, allowable_set):
     """Maps inputs not in the allowable set to the last element."""
     if x not in allowable_set:
         x = allowable_set[-1]
-    return map(lambda s: x == s, allowable_set)
+    return list(map(lambda s: x == s, allowable_set))
 
 
 
@@ -51,7 +50,7 @@ def bond_features(bond):
 def num_atom_features():
     # Return length of feature vector using a very simple molecule.
     m = Chem.MolFromSmiles('CC')
-    alist = m.GetAtoms()
+    alist = list(m.GetAtoms())
     a = alist[0]
     return len(atom_features(a))
 

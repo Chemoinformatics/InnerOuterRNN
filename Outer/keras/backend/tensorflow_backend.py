@@ -666,7 +666,12 @@ def concatenate(tensors, axis=-1):
             axis = axis % len(tensors[0].get_shape())
         else:
             axis = 0
-    return tf.concat(axis, tensors)
+    try:
+        rval = tf.concat(concat_dim=axis, values=tensors) #old tf
+    except:
+        rval = tf.concat(axis=axis, values=tensors) #new tf
+    return rval
+    
 
 
 def reshape(x, shape):
@@ -744,7 +749,7 @@ def repeat_elements(x, rep, axis):
     splits = tf.split(axis, x_shape[axis], x)
     # repeat each slice the given number of reps
     x_rep = [s for s in splits for i in range(rep)]
-    return tf.concat(axis, x_rep)
+    return tf.concat(axis=axis, values=x_rep)
 
 
 def repeat(x, n):
