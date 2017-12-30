@@ -6,6 +6,15 @@ import copy
 import warnings
 from .common import _FLOATX, _EPSILON, _IMAGE_DIM_ORDERING, reset_uids
 
+#from tensorflow.python.training import moving_averages
+#from tensorflow.python.ops import tensor_array_ops
+from tensorflow.python.ops import control_flow_ops
+#from tensorflow.python.ops import functional_ops
+#from tensorflow.python.ops import ctc_ops as ctc
+#from tensorflow.python.ops import variables as tf_variables
+#from tensorflow.python.client import device_lib
+
+
 # INTERNAL UTILS
 
 _SESSION = None
@@ -671,7 +680,7 @@ def concatenate(tensors, axis=-1):
     except:
         rval = tf.concat(axis=axis, values=tensors) #new tf
     return rval
-    
+
 
 
 def reshape(x, shape):
@@ -1092,7 +1101,7 @@ def switch(condition, then_expression, else_expression):
         else_expression: TensorFlow operation.
     '''
     x_shape = copy.copy(then_expression.get_shape())
-    x = tf.python.control_flow_ops.cond(tf.cast(condition, 'bool'),
+    x = control_flow_ops.cond(tf.cast(condition, 'bool'),
                                         lambda: then_expression,
                                         lambda: else_expression)
     x.set_shape(x_shape)
@@ -1109,7 +1118,7 @@ def in_train_phase(x, alt):
         return alt
     # else: assume learning phase is a placeholder.
     x_shape = copy.copy(x.get_shape())
-    x = tf.python.control_flow_ops.cond(tf.cast(_LEARNING_PHASE, 'bool'),
+    x = control_flow_ops.cond(tf.cast(_LEARNING_PHASE, 'bool'),
                                         lambda: x,
                                         lambda: alt)
     x._uses_learning_phase = True
@@ -1126,7 +1135,7 @@ def in_test_phase(x, alt):
     elif _LEARNING_PHASE is 0:
         return x
     x_shape = copy.copy(x.get_shape())
-    x = tf.python.control_flow_ops.cond(tf.cast(_LEARNING_PHASE, 'bool'),
+    x = control_flow_ops.cond(tf.cast(_LEARNING_PHASE, 'bool'),
                                         lambda: alt,
                                         lambda: x)
     x._uses_learning_phase = True
