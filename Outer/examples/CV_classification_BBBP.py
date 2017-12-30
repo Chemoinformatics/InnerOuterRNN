@@ -9,8 +9,8 @@ import sys; sys.path.append('..') #makes this script runnable from the /examples
 import OuterModel.train_helper as train_helper
 import OuterModel.train_outer as train_outer
 
-target_field_name = 'binary_penetration'
-input_data_csv = '../data/bbbp2__blood_brain_barrier_penetration.csv'
+target_field_name = 'p_np'
+input_data_csv = '../data/BBBP.csv'
 data_name='BBBP'
 
 
