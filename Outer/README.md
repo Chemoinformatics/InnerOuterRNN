@@ -36,9 +36,10 @@ The implementation expects the input data to be stored as .csv file, with one co
 
 The regression or classification model is constructed by calling the following functing with appropriate parameters:
 
-	model = OuterModel.fingerprint_model_index_based.build_fingerprint_model(fp_length=50, fp_depth=4, conv_width=20, \
-							predictor_MLP_layers=[200, 200, 200], L2_reg=3e-4, regression=True, number_of_classes=2, \
-							binary_multitask=False, masked_loss_function=False)
+	model = OuterModel.fingerprint_model_index_based.build_fingerprint_model(fp_length=50, fp_depth=4, conv_width=20, 
+								predictor_MLP_layers=[200, 200, 200], L2_reg=3e-4, 
+								regression=True, number_of_classes=2, 
+								binary_multitask=False, masked_loss_function=False)
 
 fp\_length:
 
@@ -93,15 +94,15 @@ masked\_loss\_function:
 Use the following function to transform the data from a list of SMILES into a form that can be used by the compiled Keras model (it will return a list of dictionaries that encode features of the molecular graphs, and uses RDKit for this purpose):
 
 	train_data, validation_data, test_data = data_preprocessing.preprocess_data_set_for_Model(train_data, 
-																							validation_data, 
-																							test_data, 
-																							training_batchsize = 20, 
-																							testset_batchsize = 1000)
+	                                                                                          validation_data, 
+	                                                                                          test_data, 
+	                                                                                          training_batchsize = 20, 
+	                                                                                          testset_batchsize = 1000)
 
 The following function will train the model for a given number of epochs, starting with a given initial learning rate which will be decayed to <total_lr_decay> of its starting value over the course of training:
 
-	OuterModel.train_outer.train_model(model, train_data, valid_data, test_data, initial_lr=0.002, 
-									   total_lr_decay=0.01, batchsize = 20, num_epochs = 120, regression = False)
+	OuterModel.train_outer.train_model(model, train_data, valid_data, test_data, initial_lr=0.002,
+	                                   total_lr_decay=0.01, batchsize = 20, num_epochs = 120, regression = False)
 
 the training function returns the model and train/validation/test scores of the model at the point where it reached the best validation score (early stopping).
 
