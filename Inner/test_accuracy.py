@@ -1,19 +1,8 @@
-#import g
 import numpy as np
 
 
 
-
-
-
-
-
-
-path = 'InnerModel/train/default_model_CV_{}/'
-
-
-
-
+path = 'train/default_model_CV_{}/'
 
 
 accs = []

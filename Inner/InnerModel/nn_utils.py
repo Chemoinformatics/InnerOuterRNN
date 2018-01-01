@@ -12,9 +12,13 @@ def get_activation_fun(activation_fun):
         return tf.nn.relu
     elif activation_fun == 'identity':
         return tf.identity
+    elif activation_fun == 'linear':
+        return None
+    elif activation_fun == 'sigmoid':
+        return tf.sigmoid
     else:
         raise Exception(
-            "Inavlid activation function {}".format(activation_fun))
+            "Invalid activation function {}".format(activation_fun))
 
 
 def variable_summaries(var):
@@ -27,7 +31,7 @@ def variable_summaries(var):
         tf.summary.scalar('stddev', stddev)
         tf.summary.scalar('max', tf.reduce_max(var))
         tf.summary.scalar('min', tf.reduce_min(var))
-        tf.summary.histogram('histogram', var)
+        #tf.summary.histogram('histogram', var)
 
 
 def get_initializer(initializer):

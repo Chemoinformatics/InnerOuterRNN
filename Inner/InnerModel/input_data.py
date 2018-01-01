@@ -5,37 +5,31 @@ from __future__ import print_function
 import numpy as np
 from six.moves import xrange
 
-from molecule import Molecule
-from utils import read_csv #, permute_data
+try:
+    from .molecule import Molecule
+except:
+    from molecule import Molecule
 
 
 class DataSet(object):
 
     def __init__(self, smiles, labels, contract_rings=False):
-
-        
-
-#        smiles = np.array(zip(*data)[0])
-#         labels= #np.array(zip(*data)[1])
-#        logp = np.array(zip(*data)[2]) if logp_col_name else None
-
-                         
-                       
+        assert len(smiles)==len(labels)
         delete_at = []
         for i,s in enumerate(smiles):
             if len(s)==0:
                 print('empty smile @ index {}!'.format(i))
-            
+
                 delete_at.append(i)
-        
+
         if len(delete_at):
             smiles = list(smiles)
             labels = list(labels)
         for i in delete_at[::-1]:
             del smiles[i]
             del labels[i]
-                            
-        
+
+
         self._molecules, self._labels = extract_molecules_from_smiles(smiles, labels, None, contract_rings)
         self._num_examples = len(self._molecules)
         print('DataSet: {} valid examples out of {}'.format(self._num_examples, len(smiles)))
@@ -85,7 +79,7 @@ class DataSet(object):
             self._index_in_epoch = batch_size
             assert batch_size <= self._num_examples
         end = self._index_in_epoch
-        
+
         return self._molecules[start:end], self._labels[start:end]
 
     def permute_data(self):
@@ -95,6 +89,11 @@ class DataSet(object):
 
 
 def extract_molecules_from_smiles(SMILES, labels, logp, contract_rings):
+    '''
+    SMILES:
+
+        list or array of SMILES strings
+    '''
     size = len(SMILES)
     molecules = []#np.empty(size, dtype=object)
     ret_labels= []
@@ -108,5 +107,4 @@ def extract_molecules_from_smiles(SMILES, labels, logp, contract_rings):
             ret_labels.append(labels[i])
         except:
             pass
-        
     return np.asarray(molecules), np.asarray(ret_labels)
