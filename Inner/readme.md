@@ -18,8 +18,11 @@ Properties of a molecule with N atoms are predicted by averaging the predictions
 
 
 Python 2 or 3, Numpy -- preferrably using [Anaconda](https://www.continuum.io/downloads)
-[Tensorflow](https://www.tensorflow.org/get_started/os_setup) -- get version 0.12.0 or newer
-[RDkit](http://www.rdkit.org/docs/Install.html) -- the easiest way to install it when using Anaconda is "conda install -c https://conda.anaconda.org/rdkit rdkit"
+
+[Tensorflow](https://www.tensorflow.org/get_started/os_setup) -- tested with version 1.2.1 
+
+[RDkit](http://www.rdkit.org/docs/Install.html) -- the easiest way to install it (if using Anaconda) is "conda install -c https://conda.anaconda.org/rdkit rdkit"
+
 networkx
 scipy
 scikit-learn (sklearn)
@@ -37,6 +40,10 @@ scikit-learn (sklearn)
 
 # Usage:
 
+The examples/ directory contains python code examples for various benchmark data sets that will perform a cross validation on the data. These can be used as a starting point for similar problems / datasets.
+Alternatively, one can use "python InnerModel/train.py ARGUMENTS" directly, with the appropriate arguments as shown below:
+
+
 ### run InnerModel/train.py to train models
 
 
@@ -46,7 +53,7 @@ scikit-learn (sklearn)
                         
   --max_epochs 
   
-      Number of epochs to run the training for
+      Number of epochs to run the training for.
                         
   --batch_size 
   
