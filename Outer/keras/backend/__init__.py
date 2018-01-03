@@ -17,12 +17,12 @@ _keras_base_dir = os.path.expanduser('~')
 if not os.access(_keras_base_dir, os.W_OK):
     _keras_base_dir = '/tmp'
 
-_keras_dir = os.path.join(_keras_base_dir, '.keras')
+_keras_dir = os.path.join(_keras_base_dir, '.Keras')
 if not os.path.exists(_keras_dir):
     os.makedirs(_keras_dir)
 
 _BACKEND = 'theano'
-_config_path = os.path.expanduser(os.path.join(_keras_dir, 'keras.json'))
+_config_path = os.path.expanduser(os.path.join(_keras_dir, 'Keras.json'))
 if os.path.exists(_config_path):
     _config = json.load(open(_config_path))
     _floatx = _config.get('floatx', floatx())

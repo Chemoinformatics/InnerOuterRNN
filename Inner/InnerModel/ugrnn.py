@@ -344,8 +344,6 @@ class UGRNN(object):
         merged_summaries = tf.summary.merge_all()
 
         train_writer = tf.summary.FileWriter(output_dir + '/train', sess.graph)
-        #train_writer = tf.train.SummaryWriter(output_dir + '/train', sess.graph)
-#        print('train_dataset',train_dataset)
 
 
         train_metric      = self.evaluate(sess, train_dataset, Targets_UnNormalization_fn=Targets_UnNormalization_fn)

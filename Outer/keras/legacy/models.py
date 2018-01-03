@@ -390,7 +390,7 @@ class Graph(Model):
             nb_epoch: int.
             verbose: 0 for no logging to stdout,
                 1 for progress bar logging, 2 for one log line per epoch.
-            callbacks: `keras.callbacks.Callback` list. List of callbacks
+            callbacks: `Keras.callbacks.Callback` list. List of callbacks
                 to apply during training. See [callbacks](callbacks.md).
             validation_split: float (0. < x < 1). Fraction of the data to
                 use as held-out validation data.
@@ -728,7 +728,7 @@ class Graph(Model):
     @classmethod
     def from_config(cls, config):
         # TODO: test legacy support
-        from keras.utils.layer_utils import layer_from_config
+        from Keras.utils.layer_utils import layer_from_config
 
         def normalize_legacy_config(conf):
             if 'class_name' not in conf:

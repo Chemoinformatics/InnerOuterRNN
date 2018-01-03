@@ -12,7 +12,7 @@ def load_data(path='imdb_full.pkl', nb_words=None, skip_top=0,
               start_char=1, oov_char=2, index_from=3):
     '''
     # Arguments
-        path: where to store the data (in `/.keras/dataset`)
+        path: where to store the data (in `/.Keras/dataset`)
         nb_words: max number of words to include. Words are ranked
             by how often they occur (in the training set) and only
             the most frequent words are kept

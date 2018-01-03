@@ -35,7 +35,7 @@ class Wrapper(Layer):
 
     @classmethod
     def from_config(cls, config):
-        from keras.utils.layer_utils import layer_from_config
+        from Keras.utils.layer_utils import layer_from_config
         layer = layer_from_config(config.pop('layer'))
         return cls(layer, **config)
 

@@ -238,7 +238,7 @@ def train_model(model, train_data, valid_data, test_data,
     Returns:
     -----------
 
-        model (keras model object) -- model/weights selected by early-stopping on the validation set (model at epoch with lowest validation error)
+        model (Keras model object) -- model/weights selected by early-stopping on the validation set (model at epoch with lowest validation error)
 
         3-tuple of train/validation/test dictionaries (as returned by eval_metrics_on(...) )
 

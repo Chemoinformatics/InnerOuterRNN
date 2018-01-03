@@ -40,8 +40,9 @@ scikit-learn (sklearn)
 
 # Usage:
 
-The examples/ directory contains python code examples for various benchmark data sets that will perform a cross validation on the data. These can be used as a starting point for similar problems / datasets.
-Alternatively, one can use "python InnerModel/train.py ARGUMENTS" directly, with the appropriate arguments as shown below:
+The examples/ directory contains python code examples for various benchmark data sets. Their default settings will perform a ten-fold cross validation on the data. These can be used as a starting point for similar problems or datasets.
+
+Alternatively, one can call "python InnerModel/train.py [ARGUMENTS]" directly, with appropriate arguments as detailed below:
 
 
 ### run InnerModel/train.py to train models
@@ -61,42 +62,43 @@ Alternatively, one can use "python InnerModel/train.py ARGUMENTS" directly, with
                         
   --model_params 
   
-      Model Parameters: a tuple of three nubers (e.g. 7,7,5)
+      Model Parameters: a tuple of three nubers (e.g. 14,13,14)
       The first entry is the size of the hidden layer of the network that crawls along the directed 
       edges of a view on the molecule (Mg hidden units in the paper).
       The second entry is the size of the internal output layer of the network that transfers the 
       assembled information from of a view on the molecule to the averaging step (Mg output units in the paper).
       The third entry is the size of the hidden layer of the 'external' output network that makes the 
       final prediction for the molecule after the averaging step (Mo hidden units in the paper).
+  
   --learning_rate 
   
       Initial learning rate (defaults to 1e-3)
+
   --output_dir 
   
-      Directory for storing the trained models
+      Directory for storing the trained models (default: model_training_output)
+
   --training_file 
   
       Path to the csv file containing training data set (e.g. data/delaney/train_delaney.csv)
+
   --validation_file 
   
       Path to the csv file containing validation data set (e.g. data/delaney/validate_delaney.csv)
       Leave empty to run a cross-validation on the data set specified by <training_file> instead.
+
   --smile_col 
   
       Column in the csv file that represents the inputs for the UG-RNN -- i.e. the SMILES of the molecules
-  --logp_col 
   
-      Column in the csv file that holds logP information 
-      (if present in data set and if --add_logp option is used)
   --target_col 
   
-      Column in the csv file that represents the prediction target for the UG-RNN
+      Column in the csv file that represents the prediction target for the RNN
+      
   --contract_rings
       
-      Boolean (see paper for details) [default False]
-  --add_logp
-  
-      Boolean (see paper for details) [default False]
+      Boolean (contract cycles in molecules into a single node; see paper for details) [default False]
+
   --clip_gradient
   
       Boolean, specify whether to clip gradients during training, by default False as it is 
@@ -105,6 +107,20 @@ Alternatively, one can use "python InnerModel/train.py ARGUMENTS" directly, with
   --crossval_total_num_splits
 
       If <validation_file> is left empty then this defines the number of cross-validation runs that will be performed (default:10)
+
+
+
+#### Examples:
+
+To train one model on one train/validation split of the ESOL/Delaney data set (run within the Inner/ directory):
+
+    python InnerModel/train.py --training_file=data/delaney/train_delaney.csv --validation_file=data/delaney/validate_delaney.csv --model_params=14,13,12
+
+
+To perform a 5-fold cross-validation on the Lipophilicity (LIPO) data set (run within the Inner/ directory):
+
+    python InnerModel/train.py --training_file=data/Lipophilicity.csv --model_params=14,13,12 --crossval_total_num_splits=5 --smile_col=smiles --target_col=exp
+
 
 
 
@@ -119,25 +135,30 @@ Alternatively, one can use "python InnerModel/train.py ARGUMENTS" directly, with
   --model_params  [can be a list]
   
       Model Parameters (same as the ones used for training. 3-tuples, one for each model)
+
   --output_dir 
   
       Root Directory where the model parameters are stored
+
   --test_file 
   
       Path to the csv file containing test data set
+
   --validation_file 
   
       Path to the csv file containing validation data set
+
   --smile_col 
   
-  --logp_col 
-  
+    Column in the csv file that represents the inputs for the RNN, i.e. the SMILES of the molecules
+
   --target_col 
   
-  --contract_rings
-  
-  --add_logp
+    Column in the csv file that represents the prediction target for the RNN
 
+  --contract_rings
+
+    Boolean (contract cycles in molecules into a single node; see paper for details) [default False]
 
 
 
@@ -145,8 +166,9 @@ Alternatively, one can use "python InnerModel/train.py ARGUMENTS" directly, with
 
 ## Authors:
 
-Akshay Jain <akshaybetala@gmail.com>
 Gregor Urban <gurban@uci.edu>
+Akshay Jain <akshaybetala@gmail.com>
+
 
 
 

@@ -147,7 +147,7 @@ def read_csv(filename, nrows, input_name, target_name, delimiter = ',', logp_col
                         print('Invalid label: {}'.format(x))
             else:
                 print('Invalid label <{}> or <{}> for row <{}>'.format(input_name, target_name, row))
-    return np.asarray(data), np.asarray(labels)#return map(np.asarray, data)
+    return np.asarray(data), np.asarray(labels)
 
 
 """

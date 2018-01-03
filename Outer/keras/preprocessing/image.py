@@ -208,7 +208,7 @@ class ImageDataGenerator(object):
         dim_ordering: 'th' or 'tf'. In 'th' mode, the channels dimension
             (the depth) is at index 1, in 'tf' mode it is at index 3.
             It defaults to the `image_dim_ordering` value found in your
-            Keras config file at `~/.keras/keras.json`.
+            Keras config file at `~/.Keras/Keras.json`.
             If you never set it, then it will be "th".
     '''
     def __init__(self,

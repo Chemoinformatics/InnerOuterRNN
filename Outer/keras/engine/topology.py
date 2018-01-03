@@ -2299,7 +2299,7 @@ class Container(Layer):
 
         TODO: support for custom objects
         '''
-        from keras.utils.layer_utils import layer_from_config
+        from Keras.utils.layer_utils import layer_from_config
 
         # layer instances created during
         # the graph reconstruction process
@@ -2363,7 +2363,7 @@ class Container(Layer):
         This allows you to save the entirety of the state of a model
         in a single file.
 
-        Saved models can be reinstantiated via `keras.models.load_model`.
+        Saved models can be reinstantiated via `Keras.models.load_model`.
         The model returned by `load_model`
         is a compiled model ready to be used (unless the saved model
         was never compiled in the first place).
@@ -2371,7 +2371,7 @@ class Container(Layer):
         # Example usage
 
         ```python
-        from keras.models import load_model
+        from Keras.models import load_model
 
         model.save('my_model.h5')  # creates a HDF5 file 'my_model.h5'
         del model  # deletes the existing model
@@ -2522,7 +2522,7 @@ class Container(Layer):
 
     def _updated_config(self):
         '''shared between different serialization methods'''
-        from keras import __version__ as keras_version
+        from Keras import __version__ as keras_version
 
         config = self.get_config()
         model_config = {
@@ -2536,7 +2536,7 @@ class Container(Layer):
         '''Returns a JSON string containing the network configuration.
 
         To load a network from a JSON save file, use
-        `keras.models.model_from_json(json_string, custom_objects={})`.
+        `Keras.models.model_from_json(json_string, custom_objects={})`.
         '''
         import json
 
@@ -2558,7 +2558,7 @@ class Container(Layer):
         '''Returns a yaml string containing the network configuration.
 
         To load a network from a yaml save file, use
-        `keras.models.model_from_yaml(yaml_string, custom_objects={})`.
+        `Keras.models.model_from_yaml(yaml_string, custom_objects={})`.
 
         `custom_objects` should be a dictionary mapping
         the names of custom losses / layers / etc to the corresponding
@@ -2568,7 +2568,7 @@ class Container(Layer):
         return yaml.dump(self._updated_config(), **kwargs)
 
     def summary(self, line_length=100, positions=[.33, .55, .67, 1.]):
-        from keras.utils.layer_utils import print_summary
+        from Keras.utils.layer_utils import print_summary
 
         if hasattr(self, 'flattened_layers'):
             # support for legacy Sequential/Merge behavior

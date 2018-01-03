@@ -8,7 +8,7 @@ import warnings
 
 from collections import deque
 from .utils.generic_utils import Progbar
-from keras import backend as K
+from Keras import backend as K
 from pkg_resources import parse_version
 
 
@@ -81,7 +81,7 @@ class Callback(object):
     # Properties
         params: dict. Training parameters
             (eg. verbosity, batch size, number of epochs...).
-        model: instance of `keras.models.Model`.
+        model: instance of `Keras.models.Model`.
             Reference of the model being trained.
 
     The `logs` dictionary that callback methods
@@ -463,7 +463,7 @@ class TensorBoard(Callback):
 
     def _set_model(self, model):
         import tensorflow as tf
-        import keras.backend.tensorflow_backend as KTF
+        import Keras.backend.tensorflow_backend as KTF
 
         self.model = model
         self.sess = KTF.get_session()

@@ -33,9 +33,9 @@ import tensorflow as tf
 
 
 
-def build_and_train(logger, session, output_dir, train_data, valid_data, logp_col_name, experiment_name = '',
+def build_and_train(logger, session, output_dir, train_data, valid_data, experiment_name = '',
                     regression = True, binary_classification = False, model_name = 'ugrnn_1',
-                    batch_size = 10, clip_gradient = False, model_params = None, add_logp = False,
+                    batch_size = 10, clip_gradient = False, model_params = None,
                     contract_rings = False, learning_rate = 1e-3, max_epochs = 150, enable_plotting = False,
                     Targets_UnNormalization_fn = lambda x:x, weight_decay_factor = 0, *args, **kwargs):
 
@@ -66,18 +66,11 @@ def build_and_train(logger, session, output_dir, train_data, valid_data, logp_co
     train_dataset      = DataSet(smiles=train_data[0], labels=train_labels, contract_rings=contract_rings)
     validation_dataset = DataSet(smiles=valid_data[0], labels=valid_labels, contract_rings=contract_rings)
 
-#
-#    print(model_name, model_params[0],
-#                        model_params[1], model_params[2],
-#                        batch_size, learning_rate, add_logp,
-#                        clip_gradient,  regression,
-#                        num_tasks, multitask, is_masked)
-#    exit()
 
     logger.info("Creating Graph.")
     ugrnn_model = UGRNN(model_name, encoding_nn_hidden_size=model_params[0],
                         encoding_nn_output_size=model_params[1], output_nn_hidden_size=model_params[2],
-                        batch_size=batch_size, learning_rate=learning_rate, add_logp=add_logp,
+                        batch_size=batch_size, learning_rate=learning_rate, add_logp=False,
                         clip_gradients=clip_gradient, regression = regression, weight_decay_factor = weight_decay_factor,
                         num_tasks = num_tasks, multitask = multitask, weighted_loss = is_masked)
     logger.info("Succesfully created graph.")
@@ -85,7 +78,9 @@ def build_and_train(logger, session, output_dir, train_data, valid_data, logp_co
     init = tf.global_variables_initializer()
     session.run(init)
 
-    training_scores_dict, validation_scores_dict = ugrnn_model.train(session, max_epochs, train_dataset, validation_dataset, output_dir, enable_plotting = bool(enable_plotting), Targets_UnNormalization_fn = Targets_UnNormalization_fn)
+    training_scores_dict, validation_scores_dict = ugrnn_model.train(session, max_epochs, train_dataset, validation_dataset,
+                                                                     output_dir, enable_plotting = bool(enable_plotting),
+                                                                     Targets_UnNormalization_fn = Targets_UnNormalization_fn)
     ugrnn_model.save_model(session, output_dir, max_epochs)
     return training_scores_dict, validation_scores_dict
 
@@ -96,7 +91,7 @@ def build_and_train(logger, session, output_dir, train_data, valid_data, logp_co
 
 
 
-def main(output_dir = 'output/', model_name = 'my_model', logp_col = '', add_logp = False,
+def main(output_dir = 'output/', model_name = 'my_model',
          training_file = 'delaney_train.csv', validation_file = 'delaney_validate.csv', smile_col = 'smiles',
          target_col = 'solubility', crossval_total_num_splits = 10, initial_crossvalidation_index = 0,
          weight_decay_factor = 0, *args, **kwargs):
@@ -129,21 +124,21 @@ def main(output_dir = 'output/', model_name = 'my_model', logp_col = '', add_log
         session = tf.Session(config=config)
 
 
-        logp_col_name = logp_col if add_logp else None
 
         logger.info('Loading data set from {:}'.format(training_file))
         csv_file_path=training_file
         smile_col_name=smile_col
         target_col_name=target_col
-        data = utils.read_csv(csv_file_path, None, smile_col_name, target_col_name, logp_col_name=logp_col_name)
+        data = utils.read_csv(csv_file_path, None, smile_col_name, target_col_name)
         assert len(data[0])>0, 'no data loaded!'
         smiles, labels = utils.permute_data(data[0], data[1])
 
         if kwargs['regression']:
+            # normalize regression targets to be in a reasonable value-range
             labels_mean  = labels.mean()
             labels_range = np.max(labels) - np.min(labels)
             labels = (labels - labels_mean)/labels_range
-            #this function MUST be applied to predictions of the model and the targets when computing metrics
+            #this function will be applied to predictions of the model and to targets when computing metrics
             def Targets_UnNormalization_fn(targets):
                 return targets*labels_range + labels_mean
             def Targets_Normalization_fn(targets):
@@ -153,23 +148,25 @@ def main(output_dir = 'output/', model_name = 'my_model', logp_col = '', add_log
                 labels = labels.reshape((len(labels),1))
             Targets_UnNormalization_fn = lambda x:x
             Targets_Normalization_fn   = lambda x:x
-        #data = list(zip(*data))
+
+
 
         if validation_file!='' and validation_file is not None:
+            # train single model
             logger.info('Loading validation dataset from {:}'.format(validation_file))
-            valid_data = utils.read_csv(validation_file, None, smile_col_name, target_col_name, logp_col_name=logp_col_name)
+            valid_data = utils.read_csv(validation_file, None, smile_col_name, target_col_name)
             if kwargs['regression']==0 and labels.ndim==1:
-                labels = labels.reshape((len(labels),1))
-            train_data = (smiles, Targets_Normalization_fn(labels))
-
-            # list(zip(*train_data)), list(zip(*valid_data)) # converts to list of 2-tuples
+                labels = labels.reshape((len(labels),1)) #binary classification
+            train_data = (smiles, labels)
+            valid_data = (valid_data[0], Targets_Normalization_fn(valid_data[1]))
 
             training_scores_dict, validation_scores_dict = build_and_train(logger, session, output_dir, train_data, valid_data,
-                                                     logp_col_name=logp_col_name,model_name = model_name,
-                                                     add_logp=add_logp, Targets_UnNormalization_fn = Targets_UnNormalization_fn,
+                                                     model_name = model_name,
+                                                     Targets_UnNormalization_fn = Targets_UnNormalization_fn,
                                                      weight_decay_factor = weight_decay_factor, **kwargs)
 
         else:
+            # cross validation
             assert initial_crossvalidation_index <crossval_total_num_splits, 'INVALID VALUE GIVEN for initial_crossvalidation_index or crossval_total_num_splits!'
             training_scores_dict, validation_scores_dict = [], []
             for crossval_split_index in range(initial_crossvalidation_index, crossval_total_num_splits):
@@ -183,8 +180,8 @@ def main(output_dir = 'output/', model_name = 'my_model', logp_col = '', add_log
 
                 td, vd = build_and_train(logger, session,
                                          output_dir+'_CV_{}'.format(crossval_split_index),
-                                         train_data, valid_data, logp_col_name,
-                                         model_name = model_name, Targets_UnNormalization_fn = Targets_UnNormalization_fn,
+                                         train_data, valid_data, model_name = model_name,
+                                         Targets_UnNormalization_fn = Targets_UnNormalization_fn,
                                          weight_decay_factor = weight_decay_factor, **kwargs)
                 training_scores_dict.append(td)
                 validation_scores_dict.append(vd)
@@ -202,37 +199,39 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', type=str, default='default_model',
                         help='Name of the model')
 
-    parser.add_argument('--max_epochs', type=int, default=190,
+    parser.add_argument('--max_epochs', type=int, default=120,
                         help='Number of epochs to run trainer.')
 
-    parser.add_argument('--batch_size', type=int, default=5,
+    parser.add_argument('--batch_size', type=int, default=6,
                         help='Batch size.')
 
-    parser.add_argument('--model_params', help="Model Parameters (Three values, corresponding to the size of the: 1) crawling network; 2) size of the crawling output layer; and 3) size of the prediction network layer)", dest="model_params", type=model_params_formatting, default = '7,7,5')
+    parser.add_argument('--model_params', help="Model Parameters (Three values, corresponding to the size of the: 1) crawling network; 2) size of the crawling output layer; and 3) size of the prediction network layer)",
+                        dest="model_params", type=model_params_formatting, default = '14,12,13')
 
-    parser.add_argument('--learning_rate', type=float, default=0.001,
+    parser.add_argument('--learning_rate', type=float, default=0.00061,
                         help='Initial learning rate')
 
-    parser.add_argument('--output_dir', type=str, default='train',
+    parser.add_argument('--output_dir', type=str, default='model_training_output',
                         help='Directory for storing the trained models')
 
     parser.add_argument('--training_file', type=str, default='../data/delaney/train_delaney.csv',
                         help='Path to the csv file containing training data set')
 
-    parser.add_argument('--validation_file', type=str, default='',#'../data/delaney/validate_delaney.csv',
+    parser.add_argument('--validation_file', type=str, default='',
                         help='Path to the csv file containing validation data set (if not provided, then a cross-validation is performed)')
 
-    parser.add_argument('--crossval_total_num_splits', help='number of cross validation splits; a higher value creates larger training sub-sets and thus usually increases overall model performance but the cross-validation process will take longer.', type=int, default=10)
+    parser.add_argument('--crossval_total_num_splits', help='number of cross validation splits; a higher value creates larger training sub-sets and thus usually increases overall model performance but the cross-validation process will take longer.',
+                        type=int, default=10)
 
     parser.add_argument('--smile_col', type=str, default='smiles')
 
-    parser.add_argument('--logp_col', type=str, default='logp')
+    #parser.add_argument('--logp_col', type=str, default='logp')
 
     parser.add_argument('--target_col', type=str, default='solubility', help='name of the column containing the target(s) for prediction. You can specify multiple targets separated by a comma ","')
 
     parser.add_argument('--contract_rings', dest='contract_rings',default = False)
 
-    parser.add_argument('--add_logp', dest='add_logp', default = False)
+    #parser.add_argument('--add_logp', dest='add_logp', default = False)
 
     parser.add_argument('--clip_gradient', dest='clip_gradient', default=False)
 

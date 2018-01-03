@@ -37,7 +37,7 @@ def save_model(model, filepath, overwrite=True):
         raise TypeError('Not JSON Serializable:', obj)
 
     import h5py
-    from keras import __version__ as keras_version
+    from Keras import __version__ as keras_version
 
     # if file exists and should not be overwritten
     if not overwrite and os.path.isfile(filepath):
@@ -170,7 +170,7 @@ def load_model(filepath, custom_objects={}):
 
 
 def model_from_config(config, custom_objects={}):
-    from keras.utils.layer_utils import layer_from_config
+    from Keras.utils.layer_utils import layer_from_config
     if isinstance(config, list):
         raise Exception('`model_fom_config` expects a dictionary, not a list. '
                         'Maybe you meant to use `Sequential.from_config(config)`?')
@@ -182,7 +182,7 @@ def model_from_yaml(yaml_string, custom_objects={}):
     and returns a model instance.
     '''
     import yaml
-    from keras.utils.layer_utils import layer_from_config
+    from Keras.utils.layer_utils import layer_from_config
     config = yaml.load(yaml_string)
     return layer_from_config(config, custom_objects=custom_objects)
 
@@ -192,7 +192,7 @@ def model_from_json(json_string, custom_objects={}):
     and returns a model instance.
     '''
     import json
-    from keras.utils.layer_utils import layer_from_config
+    from Keras.utils.layer_utils import layer_from_config
     config = json.loads(json_string)
     return layer_from_config(config, custom_objects=custom_objects)
 
@@ -543,7 +543,7 @@ class Sequential(Model):
             nb_epoch: integer, the number of epochs to train the model.
             verbose: 0 for no logging to stdout,
                 1 for progress bar logging, 2 for one log line per epoch.
-            callbacks: list of `keras.callbacks.Callback` instances.
+            callbacks: list of `Keras.callbacks.Callback` instances.
                 List of callbacks to apply during training.
                 See [callbacks](/callbacks).
             validation_split: float (0. < x < 1).
@@ -948,8 +948,8 @@ class Sequential(Model):
     def from_config(cls, config, layer_cache=None):
         '''Supports legacy formats
         '''
-        from keras.utils.layer_utils import layer_from_config
-        from keras.layers import Merge
+        from Keras.utils.layer_utils import layer_from_config
+        from Keras.layers import Merge
         assert type(config) is list
 
         if not layer_cache:

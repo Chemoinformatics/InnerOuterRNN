@@ -6,7 +6,7 @@ import sklearn.metrics as metrics
 
 
 from matplotlib import pyplot
-import keras.backend as backend
+import Keras.backend as backend
 
 from . import utils
 
@@ -22,7 +22,7 @@ def save_model_visualization(model, filename='model.png'):
     Requires the 'graphviz' software package
     '''
     try:
-        from keras.utils.visualize_util import plot
+        from Keras.utils.visualize_util import plot
         plot(model, filename, show_shapes=1)
     except:
         import traceback

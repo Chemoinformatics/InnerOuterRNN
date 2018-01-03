@@ -40,7 +40,7 @@ class BaseWrapper(object):
     1. Values passed to the dictionary arguments of
     `fit`, `predict`, `predict_proba`, and `score` methods
     2. Values passed to `sk_params`
-    3. The default values of the `keras.models.Sequential`
+    3. The default values of the `Keras.models.Sequential`
     `fit`, `predict`, `predict_proba` and `score` methods
 
     When using scikit-learn's `grid_search` API, legal tunable parameters are

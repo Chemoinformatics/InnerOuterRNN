@@ -184,7 +184,7 @@ class MaxPooling2D(_Pooling2D):
         dim_ordering: 'th' or 'tf'. In 'th' mode, the channels dimension
             (the depth) is at index 1, in 'tf' mode is it at index 3.
             It defaults to the `image_dim_ordering` value found in your
-            Keras config file at `~/.keras/keras.json`.
+            Keras config file at `~/.Keras/Keras.json`.
             If you never set it, then it will be "th".
 
     # Input shape
@@ -226,7 +226,7 @@ class AveragePooling2D(_Pooling2D):
         dim_ordering: 'th' or 'tf'. In 'th' mode, the channels dimension
             (the depth) is at index 1, in 'tf' mode is it at index 3.
             It defaults to the `image_dim_ordering` value found in your
-            Keras config file at `~/.keras/keras.json`.
+            Keras config file at `~/.Keras/Keras.json`.
             If you never set it, then it will be "th".
 
     # Input shape
@@ -331,7 +331,7 @@ class MaxPooling3D(_Pooling3D):
         dim_ordering: 'th' or 'tf'. In 'th' mode, the channels dimension
             (the depth) is at index 1, in 'tf' mode is it at index 4.
             It defaults to the `image_dim_ordering` value found in your
-            Keras config file at `~/.keras/keras.json`.
+            Keras config file at `~/.Keras/Keras.json`.
             If you never set it, then it will be "th".
 
     # Input shape
@@ -371,7 +371,7 @@ class AveragePooling3D(_Pooling3D):
         dim_ordering: 'th' or 'tf'. In 'th' mode, the channels dimension
             (the depth) is at index 1, in 'tf' mode is it at index 4.
             It defaults to the `image_dim_ordering` value found in your
-            Keras config file at `~/.keras/keras.json`.
+            Keras config file at `~/.Keras/Keras.json`.
             If you never set it, then it will be "th".
 
     # Input shape

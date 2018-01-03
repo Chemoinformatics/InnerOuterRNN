@@ -39,9 +39,9 @@ else:
 
 def get_file(fname, origin, untar=False,
              md5_hash=None, cache_subdir='datasets'):
-    datadir_base = os.path.expanduser(os.path.join('~', '.keras'))
+    datadir_base = os.path.expanduser(os.path.join('~', '.Keras'))
     if not os.access(datadir_base, os.W_OK):
-        datadir_base = os.path.join('/tmp', '.keras')
+        datadir_base = os.path.join('/tmp', '.Keras')
     datadir = os.path.join(datadir_base, cache_subdir)
     if not os.path.exists(datadir):
         os.makedirs(datadir)
