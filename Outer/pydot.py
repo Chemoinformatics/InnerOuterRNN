@@ -37,7 +37,7 @@ import copy
 import warnings
 try:
     import dot_parser
-except Exception, e:
+except Exception as e:
     warnings.warn(
         "Couldn't import dot_parser, "
         "loading of dot files will not be possible.")
@@ -102,7 +102,7 @@ CLUSTER_ATTRIBUTES = set( ['K', 'URL', 'bgcolor', 'color', 'colorscheme',
 #
 class frozendict(dict):
     def _blocked_attribute(obj):
-        raise AttributeError, "A frozendict cannot be modified."
+        raise AttributeError("A frozendict cannot be modified.")
     _blocked_attribute = property(_blocked_attribute)
 
     __delitem__ = __setitem__ = clear = _blocked_attribute
@@ -516,7 +516,7 @@ def find_graphviz():
                             #print "Used Windows registry"
                             return progs
 
-                except Exception, excp:
+                except Exception as excp:
                     #raise excp
                     pass
                 else:
@@ -578,7 +578,7 @@ def find_graphviz():
     return None
 
 
-class Common:
+class Common(object):
     """Common information to several classes.
 
     Should not be directly used, several classes are derived from
@@ -727,7 +727,7 @@ class InvocationException(Exception):
 
 
 
-class Node(object, Common):
+class Node(Common):
     """A graph node.
 
     This class represents a graph's node with all its attributes.
@@ -844,7 +844,7 @@ class Node(object, Common):
 
 
 
-class Edge(object,  Common ):
+class Edge(Common):
     """A graph edge.
 
     This class represents a graph's edge with all its attributes.
@@ -935,7 +935,7 @@ class Edge(object,  Common ):
         """
 
         if not isinstance(edge, Edge):
-            raise Error, "Can't compare and edge to a non-edge object."
+            raise Error("Can't compare and edge to a non-edge object.")
 
         if self.get_parent_graph().get_top_graph_type() == 'graph':
 
@@ -1035,7 +1035,7 @@ class Edge(object,  Common ):
 
 
 
-class Graph(object, Common):
+class Graph(Common):
     """Class representing a graph in Graphviz's dot language.
 
     This class implements the methods to work on a representation
@@ -1085,7 +1085,7 @@ class Graph(object, Common):
             self.obj_dict['attributes'] = dict(attrs)
 
             if graph_type not in ['graph', 'digraph']:
-                raise Error, 'Invalid type "%s". Accepted graph types are: graph, digraph' % graph_type
+                raise Error('Invalid type "%s". Accepted graph types are: graph, digraph' % graph_type)
 
 
             self.obj_dict['name'] = quote_if_necessary(graph_name)
@@ -2032,7 +2032,7 @@ class Dot(Graph):
                 'Program terminated with status: %d. stderr follows: %s' % (
                     status, stderr_output) )
         elif stderr_output:
-            print stderr_output
+            print(stderr_output)
 
         # For each of the image files...
         #
